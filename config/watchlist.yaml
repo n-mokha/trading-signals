@@ -1,0 +1,32 @@
+watchlist:
+  stocks:
+    - symbol: NVDA
+      name: NVIDIA Corporation
+    - symbol: AMD
+      name: Advanced Micro Devices
+    - symbol: AAPL
+      name: Apple Inc
+    - symbol: GOOGL
+      name: Alphabet Inc
+    - symbol: MSFT
+      name: Microsoft Corporation
+    - symbol: IONQ
+      name: IonQ Inc
+    - symbol: RGTI
+      name: Rigetti Computing
+    - symbol: ACHR
+      name: Archer Aviation
+    - symbol: AUR
+      name: Aurora Innovation
+    - symbol: JOBY
+      name: Joby Aviation
+    - symbol: QBTS
+      name: D-Wave Quantum
+    - symbol: RKLB
+      name: Rocket Lab USA
+
+  crypto:
+    - symbol: BTC-USD
+      name: Bitcoin
+    - symbol: ETH-USD
+      name: Ethereum

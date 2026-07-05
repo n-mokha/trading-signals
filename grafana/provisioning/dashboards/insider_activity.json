@@ -1,0 +1,277 @@
+{
+  "uid": "insider-activity",
+  "title": "Insider Activity (Form 4)",
+  "description": "Open-market Form 4 insider purchases and sales. Excludes RSU tax-withhold (F) and awards (A). Data: SEC EDGAR, updated hourly. Lookback: 90 days for scoring.",
+  "tags": [
+    "insider",
+    "form4",
+    "sec"
+  ],
+  "timezone": "browser",
+  "refresh": "1h",
+  "schemaVersion": 39,
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "annotations": {
+    "list": []
+  },
+  "templating": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "row",
+      "title": "Recent Open-Market Transactions (P=Buy, S=Sell, D=Dispose \u2014 excludes RSU/award codes)",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "panels": []
+    },
+    {
+      "id": 2,
+      "type": "table",
+      "title": "Insider Transactions \u2014 Last 90 Days",
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "options": {
+        "footer": {
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "inspect": false
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Action"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-text"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "BUY": {
+                        "color": "green",
+                        "index": 0
+                      }
+                    },
+                    "type": "value"
+                  },
+                  {
+                    "options": {
+                      "SELL": {
+                        "color": "red",
+                        "index": 1
+                      }
+                    },
+                    "type": "value"
+                  },
+                  {
+                    "options": {
+                      "DISPOSE": {
+                        "color": "orange",
+                        "index": 2
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "$ Value"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Price ($)"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "rawSql": "SELECT\n    transaction_date AS \"Date\",\n    symbol AS \"Symbol\",\n    reporter_name AS \"Reporter\",\n    CASE\n        WHEN is_director AND is_officer THEN 'Dir/Off'\n        WHEN is_director THEN 'Director'\n        WHEN is_officer THEN 'Officer'\n        ELSE 'Other'\n    END AS \"Role\",\n    CASE transaction_code\n        WHEN 'P' THEN 'BUY'\n        WHEN 'S' THEN 'SELL'\n        WHEN 'D' THEN 'DISPOSE'\n        ELSE transaction_code\n    END AS \"Action\",\n    ROUND(shares::numeric, 0) AS \"Shares\",\n    ROUND(COALESCE(price_per_share, 0)::numeric, 2) AS \"Price ($)\",\n    ROUND((shares * COALESCE(price_per_share, 0))::numeric, 0) AS \"$ Value\"\nFROM insider_transactions\nWHERE filed_at > NOW() - INTERVAL '90 days'\n  AND transaction_code IN ('P','S','D')\nORDER BY transaction_date DESC, filed_at DESC\nLIMIT 200",
+          "format": "table",
+          "rawQuery": true
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "row",
+      "title": "90-Day Open-Market Buy vs Sell by Symbol",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "panels": []
+    },
+    {
+      "id": 4,
+      "type": "barchart",
+      "title": "Buy vs Sell $ Value by Symbol (Last 90 Days)",
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "options": {
+        "orientation": "auto",
+        "xTickLabelRotation": -45,
+        "xTickLabelMaxLength": 25,
+        "groupWidth": 0.7,
+        "barWidth": 0.97,
+        "stacking": "none",
+        "showValue": "always",
+        "fillOpacity": 80,
+        "gradientMode": "none",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        },
+        "xField": "Symbol"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "fillOpacity": 80,
+            "lineWidth": 1,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Buy $"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sell $"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "rawSql": "SELECT\n    symbol AS \"Symbol\",\n    ROUND(SUM(CASE WHEN transaction_code = 'P' THEN shares * COALESCE(price_per_share, 0) ELSE 0 END)::numeric, 0) AS \"Buy $\",\n    ROUND(SUM(CASE WHEN transaction_code IN ('S','D') THEN shares * COALESCE(price_per_share, 0) ELSE 0 END)::numeric, 0) AS \"Sell $\"\nFROM insider_transactions\nWHERE filed_at > NOW() - INTERVAL '90 days'\n  AND transaction_code IN ('P','S','D')\nGROUP BY symbol\nORDER BY symbol",
+          "format": "table",
+          "rawQuery": true
+        }
+      ]
+    }
+  ],
+  "version": 1
+}

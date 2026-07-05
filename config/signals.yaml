@@ -1,0 +1,39 @@
+# ---------------------------------------------------------------------------
+# Tier 2 engine configuration
+# Tweak weights and lookback windows without rebuilding the container.
+# ---------------------------------------------------------------------------
+
+engine:
+  run_interval_seconds: 900     # score every 15 minutes
+
+scoring:
+  signal_version: "1.0"
+
+  lookback:
+    insider_days: 90            # Form 4 filing lookback
+    sentiment_hours: 24         # social sentiment lookback window
+
+  sentiment:
+    weights:
+      stocktwits: 0.6           # explicit Bullish/Bearish user tags — higher quality signal
+      reddit: 0.4               # keyword-heuristic scoring — lower quality, currently disabled
+
+  weights:
+    # Must sum to 1.0. Signals with no data are excluded and weights renormalized.
+    price:       0.40
+    fundamental: 0.30
+    insider:     0.10
+    sentiment:   0.20
+
+  macro:
+    vix_thresholds:
+      low: 15       # VIX at or below this → no dampening (modifier = 1.0)
+      high: 30      # VIX at or above this → max dampening
+    max_dampening: 0.25   # scale composite toward 50 by up to 25% in risk-off
+
+alerts:
+  enabled: false            # set to true and fill ALERT_* env vars to enable email alerts
+  bullish_threshold: 70     # composite score above this → BULLISH alert
+  bearish_threshold: 30     # composite score below this → BEARISH alert
+  smtp_host: "smtp.gmail.com"
+  smtp_port: 587

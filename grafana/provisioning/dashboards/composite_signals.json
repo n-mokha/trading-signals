@@ -1,0 +1,494 @@
+{
+  "uid": "composite-signals",
+  "title": "Composite Signal Scores",
+  "description": "Tier 2 engine output — composite scores (0–100) per symbol. >65 = bullish, <35 = bearish. Refreshes every 15 min.",
+  "tags": ["signals", "composite"],
+  "timezone": "browser",
+  "refresh": "5m",
+  "schemaVersion": 39,
+  "time": {"from": "now-24h", "to": "now"},
+  "timepicker": {},
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "links": [],
+  "annotations": {"list": []},
+  "panels": [
+    {
+      "id": 1, "type": "row", "title": "Current Composite Scores",
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0},
+      "panels": []
+    },
+    {
+      "id": 2, "type": "stat", "title": "NVDA — Composite Score",
+      "gridPos": {"h": 5, "w": 6, "x": 0, "y": 1},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "background",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 36}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 1, "min": 0, "max": 100,
+          "displayName": "NVDA",
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "#d73027", "value": null},
+            {"color": "#f4a736", "value": 35},
+            {"color": "#1a9641", "value": 65}
+          ]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT composite_score FROM signals WHERE symbol = 'NVDA' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 3, "type": "stat", "title": "AMD — Composite Score",
+      "gridPos": {"h": 5, "w": 6, "x": 6, "y": 1},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "background",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 36}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 1, "min": 0, "max": 100,
+          "displayName": "AMD",
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "#d73027", "value": null},
+            {"color": "#f4a736", "value": 35},
+            {"color": "#1a9641", "value": 65}
+          ]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT composite_score FROM signals WHERE symbol = 'AMD' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 4, "type": "stat", "title": "AAPL — Composite Score",
+      "gridPos": {"h": 5, "w": 6, "x": 12, "y": 1},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "background",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 36}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 1, "min": 0, "max": 100,
+          "displayName": "AAPL",
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "#d73027", "value": null},
+            {"color": "#f4a736", "value": 35},
+            {"color": "#1a9641", "value": 65}
+          ]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT composite_score FROM signals WHERE symbol = 'AAPL' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 5, "type": "stat", "title": "GOOGL — Composite Score",
+      "gridPos": {"h": 5, "w": 6, "x": 18, "y": 1},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "background",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 36}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 1, "min": 0, "max": 100,
+          "displayName": "GOOGL",
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "#d73027", "value": null},
+            {"color": "#f4a736", "value": 35},
+            {"color": "#1a9641", "value": 65}
+          ]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT composite_score FROM signals WHERE symbol = 'GOOGL' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 6, "type": "stat", "title": "MSFT — Composite Score",
+      "gridPos": {"h": 5, "w": 6, "x": 0, "y": 6},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "background",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 36}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 1, "min": 0, "max": 100,
+          "displayName": "MSFT",
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "#d73027", "value": null},
+            {"color": "#f4a736", "value": 35},
+            {"color": "#1a9641", "value": 65}
+          ]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT composite_score FROM signals WHERE symbol = 'MSFT' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 7, "type": "stat", "title": "IONQ — Composite Score",
+      "gridPos": {"h": 5, "w": 6, "x": 6, "y": 6},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "background",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 36}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 1, "min": 0, "max": 100,
+          "displayName": "IONQ",
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "#d73027", "value": null},
+            {"color": "#f4a736", "value": 35},
+            {"color": "#1a9641", "value": 65}
+          ]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT composite_score FROM signals WHERE symbol = 'IONQ' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 8, "type": "stat", "title": "RGTI — Composite Score",
+      "gridPos": {"h": 5, "w": 6, "x": 12, "y": 6},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "background",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 36}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 1, "min": 0, "max": 100,
+          "displayName": "RGTI",
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "#d73027", "value": null},
+            {"color": "#f4a736", "value": 35},
+            {"color": "#1a9641", "value": 65}
+          ]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT composite_score FROM signals WHERE symbol = 'RGTI' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 9, "type": "stat", "title": "ACHR — Composite Score",
+      "gridPos": {"h": 5, "w": 6, "x": 18, "y": 6},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "background",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 36}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 1, "min": 0, "max": 100,
+          "displayName": "ACHR",
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "#d73027", "value": null},
+            {"color": "#f4a736", "value": 35},
+            {"color": "#1a9641", "value": 65}
+          ]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT composite_score FROM signals WHERE symbol = 'ACHR' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 10, "type": "stat", "title": "AUR — Composite Score",
+      "gridPos": {"h": 5, "w": 8, "x": 0, "y": 11},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "background",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 36}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 1, "min": 0, "max": 100,
+          "displayName": "AUR",
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "#d73027", "value": null},
+            {"color": "#f4a736", "value": 35},
+            {"color": "#1a9641", "value": 65}
+          ]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT composite_score FROM signals WHERE symbol = 'AUR' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 11, "type": "stat", "title": "JOBY — Composite Score",
+      "gridPos": {"h": 5, "w": 8, "x": 8, "y": 11},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "background",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 36}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 1, "min": 0, "max": 100,
+          "displayName": "JOBY",
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "#d73027", "value": null},
+            {"color": "#f4a736", "value": 35},
+            {"color": "#1a9641", "value": 65}
+          ]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT composite_score FROM signals WHERE symbol = 'JOBY' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 12, "type": "stat", "title": "QBTS — Composite Score",
+      "gridPos": {"h": 5, "w": 8, "x": 16, "y": 11},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "background",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 36}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 1, "min": 0, "max": 100,
+          "displayName": "QBTS",
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "#d73027", "value": null},
+            {"color": "#f4a736", "value": 35},
+            {"color": "#1a9641", "value": 65}
+          ]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT composite_score FROM signals WHERE symbol = 'QBTS' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 13, "type": "stat", "title": "RKLB — Composite Score",
+      "gridPos": {"h": 5, "w": 8, "x": 0, "y": 16},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "background",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 36}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 1, "min": 0, "max": 100,
+          "displayName": "RKLB",
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "#d73027", "value": null},
+            {"color": "#f4a736", "value": 35},
+            {"color": "#1a9641", "value": 65}
+          ]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT composite_score FROM signals WHERE symbol = 'RKLB' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 14, "type": "stat", "title": "BTC-USD — Composite Score",
+      "gridPos": {"h": 5, "w": 8, "x": 8, "y": 16},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "background",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 36}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 1, "min": 0, "max": 100,
+          "displayName": "BTC-USD",
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "#d73027", "value": null},
+            {"color": "#f4a736", "value": 35},
+            {"color": "#1a9641", "value": 65}
+          ]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT composite_score FROM signals WHERE symbol = 'BTC-USD' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 15, "type": "stat", "title": "ETH-USD — Composite Score",
+      "gridPos": {"h": 5, "w": 8, "x": 16, "y": 16},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "background",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 36}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 1, "min": 0, "max": 100,
+          "displayName": "ETH-USD",
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "#d73027", "value": null},
+            {"color": "#f4a736", "value": 35},
+            {"color": "#1a9641", "value": 65}
+          ]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT composite_score FROM signals WHERE symbol = 'ETH-USD' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 16, "type": "row", "title": "Score History",
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 21},
+      "panels": []
+    },
+    {
+      "id": 17, "type": "timeseries",
+      "title": "Composite Score — All Symbols",
+      "description": "Engine runs every 15 min. Scores above 65 are bullish (green zone), below 35 are bearish (red zone). VIX dampening pulls scores toward 50 in volatile markets.",
+      "gridPos": {"h": 12, "w": 24, "x": 0, "y": 22},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "tooltip": {"mode": "multi", "sort": "desc"},
+        "legend": {"displayMode": "list", "placement": "bottom", "showLegend": true}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 1,
+          "min": 0,
+          "max": 100,
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8,
+            "spanNulls": true,
+            "showPoints": "auto",
+            "pointSize": 4
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "#d73027", "value": null},
+              {"color": "#f4a736", "value": 35},
+              {"color": "#1a9641", "value": 65}
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "time_series", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT\n  time_bucket('15 minutes', time) AS time,\n  symbol AS metric,\n  ROUND(composite_score::numeric, 1) AS value\nFROM signals\nWHERE $__timeFilter(time)\nGROUP BY 1, symbol, composite_score\nORDER BY 1, 2"
+      }]
+    },
+    {
+      "id": 18, "type": "row", "title": "Signal Breakdown",
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 34},
+      "panels": []
+    },
+    {
+      "id": 19, "type": "table",
+      "title": "Latest Score Breakdown per Symbol",
+      "description": "Sub-scores from each signal source. Price and fundamental drive 70% of the composite. Insider is 10%, sentiment 20% (disabled when Reddit is off). Macro modifier scales toward 50 during high VIX.",
+      "gridPos": {"h": 9, "w": 24, "x": 0, "y": 35},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "showHeader": true,
+        "sortBy": [{"displayName": "Composite", "desc": true}],
+        "cellHeight": "md",
+        "footer": {"show": false}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {"align": "auto", "displayMode": "auto", "filterable": false}
+        },
+        "overrides": [
+          {
+            "matcher": {"id": "byName", "options": "Composite"},
+            "properties": [
+              {"id": "decimals", "value": 1},
+              {"id": "custom.displayMode", "value": "color-background"},
+              {"id": "thresholds", "value": {"mode": "absolute", "steps": [
+                {"color": "#d73027", "value": null},
+                {"color": "#f4a736", "value": 35},
+                {"color": "#1a9641", "value": 65}
+              ]}},
+              {"id": "color", "value": {"mode": "thresholds"}}
+            ]
+          },
+          {
+            "matcher": {"id": "byName", "options": "Last Updated"},
+            "properties": [{"id": "unit", "value": "dateTimeFromNow"}]
+          }
+        ]
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT DISTINCT ON (symbol)\n  symbol                                                        AS \"Symbol\",\n  ROUND(composite_score::numeric, 1)                            AS \"Composite\",\n  ROUND(COALESCE(price_score, 0)::numeric, 2)                   AS \"Price\",\n  ROUND(COALESCE(fundamental_score, 0)::numeric, 2)             AS \"Fundamental\",\n  ROUND(COALESCE(insider_score, 0)::numeric, 2)                 AS \"Insider\",\n  ROUND(COALESCE(sentiment_score, 0)::numeric, 2)               AS \"Sentiment\",\n  ROUND(macro_modifier::numeric, 3)                             AS \"Macro Mod\",\n  time                                                          AS \"Last Updated\"\nFROM signals\nORDER BY symbol, time DESC"
+      }]
+    }
+  ],
+  "version": 1
+}

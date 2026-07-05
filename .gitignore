@@ -1,0 +1,20 @@
+# Environment — never commit real keys
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Docker volumes (if accidentally created locally)
+postgres_data/
+
+# IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Claude Code local settings
+.claude/

@@ -1,0 +1,311 @@
+{
+  "uid": "institutional-ownership",
+  "title": "Institutional Ownership",
+  "description": "13-F institutional holder breakdown from yfinance. Updated daily.",
+  "tags": [
+    "institutional",
+    "ownership",
+    "13f"
+  ],
+  "timezone": "browser",
+  "refresh": "1h",
+  "schemaVersion": 39,
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "annotations": {
+    "list": []
+  },
+  "templating": {
+    "list": []
+  },
+  "version": 6,
+  "panels": [
+    {
+      "id": 1,
+      "type": "row",
+      "title": "Ownership Overview \u2014 All Symbols",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "panels": []
+    },
+    {
+      "id": 2,
+      "type": "table",
+      "title": "Institutional & Insider Ownership by Symbol",
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "options": {
+        "footer": {
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Inst Float %"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Inst Total %"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Insiders %"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "rawSql": "SELECT\n    symbol AS \"Symbol\",\n    ROUND((MAX(CASE WHEN metric = 'institutions_float_pct_held' THEN value END) * 100)::numeric, 1) AS \"Inst Float %\",\n    ROUND((MAX(CASE WHEN metric = 'institutions_pct_held' THEN value END) * 100)::numeric, 1) AS \"Inst Total %\",\n    ROUND((MAX(CASE WHEN metric = 'insiders_pct_held' THEN value END) * 100)::numeric, 2) AS \"Insiders %\",\n    ROUND(MAX(CASE WHEN metric = 'institutions_count' THEN value END)::numeric, 0) AS \"# Institutions\"\nFROM fundamentals\nWHERE metric IN ('institutions_float_pct_held','institutions_pct_held',\n                 'insiders_pct_held','institutions_count')\n  AND time > NOW() - INTERVAL '48 hours'\nGROUP BY symbol\nORDER BY symbol",
+          "rawQuery": true,
+          "format": "table"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "row",
+      "title": "Top 30 Holders (All Symbols, Ranked by % Held)",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 10
+      },
+      "panels": []
+    },
+    {
+      "id": 4,
+      "type": "table",
+      "title": "Top Institutional Holders",
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 24,
+        "x": 0,
+        "y": 11
+      },
+      "options": {
+        "footer": {
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value ($)"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Qtr Chg %"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-text"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    },
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "rawSql": "SELECT\n    symbol AS \"Symbol\",\n    holder AS \"Holder\",\n    ROUND((pct_held * 100)::numeric, 2) AS \"% Held\",\n    shares AS \"Shares\",\n    ROUND(COALESCE(value, 0)::numeric, 0) AS \"Value ($)\",\n    ROUND((COALESCE(pct_change, 0) * 100)::numeric, 3) AS \"Qtr Chg %\",\n    date_reported AS \"Filed\"\nFROM institutional_ownership\nORDER BY pct_held DESC NULLS LAST\nLIMIT 30",
+          "rawQuery": true,
+          "format": "table"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "row",
+      "title": "Biggest Quarter-over-Quarter Changes",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 25
+      },
+      "panels": []
+    },
+    {
+      "id": 6,
+      "type": "barchart",
+      "title": "Largest % Change in Institutional Holdings (Top 20)",
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 26
+      },
+      "options": {
+        "orientation": "horizontal",
+        "xTickLabelMaxLength": 40,
+        "groupWidth": 0.7,
+        "barWidth": 0.97,
+        "stacking": "none",
+        "showValue": "always",
+        "fillOpacity": 80,
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        },
+        "xField": "Institution"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "custom": {
+            "fillOpacity": 80,
+            "lineWidth": 1,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "rawSql": "SELECT\n    symbol || '  ' || LEFT(holder, 28) AS \"Institution\",\n    ROUND((COALESCE(pct_change, 0) * 100)::numeric, 3) AS \"% Change\"\nFROM institutional_ownership\nWHERE pct_change IS NOT NULL\nORDER BY ABS(pct_change) DESC\nLIMIT 20",
+          "rawQuery": true,
+          "format": "table"
+        }
+      ]
+    }
+  ]
+}

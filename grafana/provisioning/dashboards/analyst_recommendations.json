@@ -1,0 +1,1690 @@
+{
+  "uid": "analyst-recommendations",
+  "title": "Analyst Recommendations",
+  "description": "Wall Street analyst recommendations and price targets. Data from FMP + yfinance, refreshed hourly. Stocks only.",
+  "tags": [
+    "analyst",
+    "stocks"
+  ],
+  "timezone": "browser",
+  "refresh": "1h",
+  "schemaVersion": 39,
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "annotations": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 20,
+      "type": "row",
+      "title": "Consensus Recommendations",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "panels": []
+    },
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "NVDA \u2014 Consensus Recommendation",
+      "description": "Dominant analyst stance for NVIDIA.",
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 1
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^recommendation$/",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "text": {
+          "valueSize": 40
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "BUY": {
+                  "color": "#1a9641",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "HOLD": {
+                  "color": "#f4a736",
+                  "index": 1
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "SELL": {
+                  "color": "#d73027",
+                  "index": 2
+                }
+              }
+            }
+          ],
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  CASE\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'BUY'\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'HOLD'\n    ELSE 'SELL'\n  END AS recommendation\nFROM fundamentals\nWHERE symbol = 'NVDA'\n  AND metric IN ('analyst_strong_buy','analyst_buy','analyst_hold','analyst_sell','analyst_strong_sell')\n  AND time > NOW() - INTERVAL '25 hours'",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "AMD \u2014 Consensus Recommendation",
+      "description": "Dominant analyst stance for AMD.",
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 1
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^recommendation$/",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "text": {
+          "valueSize": 40
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "BUY": {
+                  "color": "#1a9641",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "HOLD": {
+                  "color": "#f4a736",
+                  "index": 1
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "SELL": {
+                  "color": "#d73027",
+                  "index": 2
+                }
+              }
+            }
+          ],
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  CASE\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'BUY'\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'HOLD'\n    ELSE 'SELL'\n  END AS recommendation\nFROM fundamentals\nWHERE symbol = 'AMD'\n  AND metric IN ('analyst_strong_buy','analyst_buy','analyst_hold','analyst_sell','analyst_strong_sell')\n  AND time > NOW() - INTERVAL '25 hours'",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "AAPL \u2014 Consensus Recommendation",
+      "description": "Dominant analyst stance for Apple.",
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 12,
+        "y": 1
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^recommendation$/",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "text": {
+          "valueSize": 40
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "BUY": {
+                  "color": "#1a9641",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "HOLD": {
+                  "color": "#f4a736",
+                  "index": 1
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "SELL": {
+                  "color": "#d73027",
+                  "index": 2
+                }
+              }
+            }
+          ],
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  CASE\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'BUY'\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'HOLD'\n    ELSE 'SELL'\n  END AS recommendation\nFROM fundamentals\nWHERE symbol = 'AAPL'\n  AND metric IN ('analyst_strong_buy','analyst_buy','analyst_hold','analyst_sell','analyst_strong_sell')\n  AND time > NOW() - INTERVAL '25 hours'",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "GOOGL \u2014 Consensus Recommendation",
+      "description": "Dominant analyst stance for Google.",
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^recommendation$/",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "text": {
+          "valueSize": 40
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "BUY": {
+                  "color": "#1a9641",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "HOLD": {
+                  "color": "#f4a736",
+                  "index": 1
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "SELL": {
+                  "color": "#d73027",
+                  "index": 2
+                }
+              }
+            }
+          ],
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  CASE\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'BUY'\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'HOLD'\n    ELSE 'SELL'\n  END AS recommendation\nFROM fundamentals\nWHERE symbol = 'GOOGL'\n  AND metric IN ('analyst_strong_buy','analyst_buy','analyst_hold','analyst_sell','analyst_strong_sell')\n  AND time > NOW() - INTERVAL '25 hours'",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "MSFT \u2014 Consensus Recommendation",
+      "description": "Dominant analyst stance for Microsoft.",
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 6
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^recommendation$/",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "text": {
+          "valueSize": 40
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "BUY": {
+                  "color": "#1a9641",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "HOLD": {
+                  "color": "#f4a736",
+                  "index": 1
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "SELL": {
+                  "color": "#d73027",
+                  "index": 2
+                }
+              }
+            }
+          ],
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  CASE\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'BUY'\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'HOLD'\n    ELSE 'SELL'\n  END AS recommendation\nFROM fundamentals\nWHERE symbol = 'MSFT'\n  AND metric IN ('analyst_strong_buy','analyst_buy','analyst_hold','analyst_sell','analyst_strong_sell')\n  AND time > NOW() - INTERVAL '25 hours'",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "stat",
+      "title": "IONQ \u2014 Consensus Recommendation",
+      "description": "Dominant analyst stance for IonQ.",
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 6
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^recommendation$/",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "text": {
+          "valueSize": 40
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "BUY": {
+                  "color": "#1a9641",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "HOLD": {
+                  "color": "#f4a736",
+                  "index": 1
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "SELL": {
+                  "color": "#d73027",
+                  "index": 2
+                }
+              }
+            }
+          ],
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  CASE\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'BUY'\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'HOLD'\n    ELSE 'SELL'\n  END AS recommendation\nFROM fundamentals\nWHERE symbol = 'IONQ'\n  AND metric IN ('analyst_strong_buy','analyst_buy','analyst_hold','analyst_sell','analyst_strong_sell')\n  AND time > NOW() - INTERVAL '25 hours'",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "stat",
+      "title": "RGTI \u2014 Consensus Recommendation",
+      "description": "Dominant analyst stance for Rigetti.",
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 12,
+        "y": 6
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^recommendation$/",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "text": {
+          "valueSize": 40
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "BUY": {
+                  "color": "#1a9641",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "HOLD": {
+                  "color": "#f4a736",
+                  "index": 1
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "SELL": {
+                  "color": "#d73027",
+                  "index": 2
+                }
+              }
+            }
+          ],
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  CASE\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'BUY'\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'HOLD'\n    ELSE 'SELL'\n  END AS recommendation\nFROM fundamentals\nWHERE symbol = 'RGTI'\n  AND metric IN ('analyst_strong_buy','analyst_buy','analyst_hold','analyst_sell','analyst_strong_sell')\n  AND time > NOW() - INTERVAL '25 hours'",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "stat",
+      "title": "ACHR \u2014 Consensus Recommendation",
+      "description": "Dominant analyst stance for Archer Aviation.",
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 18,
+        "y": 6
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^recommendation$/",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "text": {
+          "valueSize": 40
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "BUY": {
+                  "color": "#1a9641",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "HOLD": {
+                  "color": "#f4a736",
+                  "index": 1
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "SELL": {
+                  "color": "#d73027",
+                  "index": 2
+                }
+              }
+            }
+          ],
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  CASE\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'BUY'\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'HOLD'\n    ELSE 'SELL'\n  END AS recommendation\nFROM fundamentals\nWHERE symbol = 'ACHR'\n  AND metric IN ('analyst_strong_buy','analyst_buy','analyst_hold','analyst_sell','analyst_strong_sell')\n  AND time > NOW() - INTERVAL '25 hours'",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "type": "stat",
+      "title": "AUR \u2014 Consensus Recommendation",
+      "description": "Dominant analyst stance for Aurora Innovation.",
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 0,
+        "y": 11
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^recommendation$/",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "text": {
+          "valueSize": 40
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "BUY": {
+                  "color": "#1a9641",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "HOLD": {
+                  "color": "#f4a736",
+                  "index": 1
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "SELL": {
+                  "color": "#d73027",
+                  "index": 2
+                }
+              }
+            }
+          ],
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  CASE\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'BUY'\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'HOLD'\n    ELSE 'SELL'\n  END AS recommendation\nFROM fundamentals\nWHERE symbol = 'AUR'\n  AND metric IN ('analyst_strong_buy','analyst_buy','analyst_hold','analyst_sell','analyst_strong_sell')\n  AND time > NOW() - INTERVAL '25 hours'",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "type": "stat",
+      "title": "JOBY \u2014 Consensus Recommendation",
+      "description": "Dominant analyst stance for Joby Aviation.",
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 8,
+        "y": 11
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^recommendation$/",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "text": {
+          "valueSize": 40
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "BUY": {
+                  "color": "#1a9641",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "HOLD": {
+                  "color": "#f4a736",
+                  "index": 1
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "SELL": {
+                  "color": "#d73027",
+                  "index": 2
+                }
+              }
+            }
+          ],
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  CASE\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'BUY'\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'HOLD'\n    ELSE 'SELL'\n  END AS recommendation\nFROM fundamentals\nWHERE symbol = 'JOBY'\n  AND metric IN ('analyst_strong_buy','analyst_buy','analyst_hold','analyst_sell','analyst_strong_sell')\n  AND time > NOW() - INTERVAL '25 hours'",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "type": "stat",
+      "title": "QBTS \u2014 Consensus Recommendation",
+      "description": "Dominant analyst stance for D-Wave.",
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 16,
+        "y": 11
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^recommendation$/",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "text": {
+          "valueSize": 40
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "BUY": {
+                  "color": "#1a9641",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "HOLD": {
+                  "color": "#f4a736",
+                  "index": 1
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "SELL": {
+                  "color": "#d73027",
+                  "index": 2
+                }
+              }
+            }
+          ],
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  CASE\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'BUY'\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'HOLD'\n    ELSE 'SELL'\n  END AS recommendation\nFROM fundamentals\nWHERE symbol = 'QBTS'\n  AND metric IN ('analyst_strong_buy','analyst_buy','analyst_hold','analyst_sell','analyst_strong_sell')\n  AND time > NOW() - INTERVAL '25 hours'",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "type": "stat",
+      "title": "RKLB \u2014 Consensus Recommendation",
+      "description": "Dominant analyst stance for Rocket Lab USA.",
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 0,
+        "y": 16
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^recommendation$/",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "text": {
+          "valueSize": 40
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "BUY": {
+                  "color": "#1a9641",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "HOLD": {
+                  "color": "#f4a736",
+                  "index": 1
+                }
+              }
+            },
+            {
+              "type": "value",
+              "options": {
+                "SELL": {
+                  "color": "#d73027",
+                  "index": 2
+                }
+              }
+            }
+          ],
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  CASE\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'BUY'\n    WHEN COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'), 0)\n       > COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'), 0)\n       + COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0)\n    THEN 'HOLD'\n    ELSE 'SELL'\n  END AS recommendation\nFROM fundamentals\nWHERE symbol = 'RKLB'\n  AND metric IN ('analyst_strong_buy','analyst_buy','analyst_hold','analyst_sell','analyst_strong_sell')\n  AND time > NOW() - INTERVAL '25 hours'",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "type": "row",
+      "title": "Recommendation Breakdown",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "panels": []
+    },
+    {
+      "id": 12,
+      "type": "barchart",
+      "title": "Analyst Recommendation Breakdown",
+      "description": "Number of Wall Street analysts recommending each rating. Stacked per symbol.",
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "options": {
+        "barWidth": 0.6,
+        "groupWidth": 0.7,
+        "stacking": "normal",
+        "xField": "symbol",
+        "fillOpacity": 85,
+        "gradientMode": "none",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "all",
+          "sort": "none"
+        },
+        "orientation": "auto"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "fillOpacity": 85,
+            "lineWidth": 0,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Strong Buy"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#1a9641",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Buy"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#a6d96a",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Hold"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#f4a736",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sell"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#f46d43",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Strong Sell"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#d73027",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  symbol,\n  COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_buy'),  0) AS \"Strong Buy\",\n  COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_buy'),         0) AS \"Buy\",\n  COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_hold'),        0) AS \"Hold\",\n  COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_sell'),        0) AS \"Sell\",\n  COALESCE(MAX(value) FILTER (WHERE metric = 'analyst_strong_sell'), 0) AS \"Strong Sell\"\nFROM fundamentals\nWHERE metric IN ('analyst_strong_buy','analyst_buy','analyst_hold','analyst_sell','analyst_strong_sell')\n  AND time > NOW() - INTERVAL '25 hours'\nGROUP BY symbol\nORDER BY symbol",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "type": "row",
+      "title": "Price Targets",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 27
+      },
+      "panels": []
+    },
+    {
+      "id": 13,
+      "type": "table",
+      "title": "Price Targets vs Current Price",
+      "description": "Target \u0394 shows how the consensus target has moved since yesterday. \u2191 = raised, \u2193 = lowered, \u2192 = unchanged.",
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 28
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "displayName": "Upside %",
+            "desc": true
+          }
+        ],
+        "cellHeight": "md",
+        "footer": {
+          "show": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": false
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Current Price"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Consensus Target"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Target High"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Target Low"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Upside %"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-text"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#d73027",
+                      "value": null
+                    },
+                    {
+                      "color": "#f4a736",
+                      "value": 0
+                    },
+                    {
+                      "color": "#1a9641",
+                      "value": 20
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Target \u0394"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-text"
+              },
+              {
+                "id": "custom.width",
+                "value": 140
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "regex",
+                    "options": {
+                      "pattern": "^\u2191",
+                      "result": {
+                        "color": "#1a9641",
+                        "index": 0
+                      }
+                    }
+                  },
+                  {
+                    "type": "regex",
+                    "options": {
+                      "pattern": "^\u2193",
+                      "result": {
+                        "color": "#d73027",
+                        "index": 1
+                      }
+                    }
+                  },
+                  {
+                    "type": "regex",
+                    "options": {
+                      "pattern": "^\u2192",
+                      "result": {
+                        "color": "#888888",
+                        "index": 2
+                      }
+                    }
+                  },
+                  {
+                    "type": "special",
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "color": "#888888",
+                        "index": 3,
+                        "text": "\u2014"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "WITH current AS (\n  SELECT symbol, metric, value\n  FROM fundamentals\n  WHERE metric IN ('price','price_target_consensus','price_target_high','price_target_low')\n    AND time > NOW() - INTERVAL '25 hours'\n),\nprev AS (\n  SELECT DISTINCT ON (symbol) symbol, value AS prev_consensus\n  FROM fundamentals\n  WHERE metric = 'price_target_consensus'\n    AND time < NOW() - INTERVAL '20 hours'\n  ORDER BY symbol, time DESC\n),\nagg AS (\n  SELECT\n    c.symbol,\n    ROUND(MAX(c.value) FILTER (WHERE c.metric = 'price')::numeric, 2)                  AS current_price,\n    ROUND(MAX(c.value) FILTER (WHERE c.metric = 'price_target_consensus')::numeric, 2) AS consensus,\n    ROUND(MAX(c.value) FILTER (WHERE c.metric = 'price_target_high')::numeric, 2)      AS target_high,\n    ROUND(MAX(c.value) FILTER (WHERE c.metric = 'price_target_low')::numeric, 2)       AS target_low,\n    p.prev_consensus\n  FROM current c\n  LEFT JOIN prev p ON c.symbol = p.symbol\n  GROUP BY c.symbol, p.prev_consensus\n  HAVING MAX(c.value) FILTER (WHERE c.metric = 'price') IS NOT NULL\n)\nSELECT\n  symbol                                                                          AS \"Symbol\",\n  current_price                                                                   AS \"Current Price\",\n  consensus                                                                       AS \"Consensus Target\",\n  target_high                                                                     AS \"Target High\",\n  target_low                                                                      AS \"Target Low\",\n  ROUND(((consensus - current_price) / NULLIF(current_price, 0) * 100)::numeric, 1) AS \"Upside %\",\n  CASE\n    WHEN prev_consensus IS NULL                   THEN '\u2014'\n    WHEN consensus - prev_consensus  >  0.01\n      THEN '\u2191 +$' || to_char((consensus - prev_consensus)::numeric,  'FM999990.00')\n    WHEN consensus - prev_consensus  < -0.01\n      THEN '\u2193 -$' || to_char((prev_consensus - consensus)::numeric,  'FM999990.00')\n    ELSE '\u2192 unchanged'\n  END                                                                             AS \"Target \u0394\"\nFROM agg\nORDER BY \"Upside %\" DESC NULLS LAST",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "type": "timeseries",
+      "title": "Consensus Price Target \u2014 30-Day Trend",
+      "description": "How the analyst consensus price target has drifted over time. A rising line means analysts are collectively raising their outlook.",
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 36
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        },
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "drawStyle": "line",
+        "lineInterpolation": "stepAfter",
+        "lineWidth": 2,
+        "fillOpacity": 10,
+        "pointSize": 4,
+        "showPoints": "auto",
+        "spanNulls": true
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2,
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "stepAfter",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": true,
+            "showPoints": "auto",
+            "pointSize": 4
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "NVDA Target"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#76b900",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "AMD Target"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#ed1c24",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  time_bucket('1 hour', time) AS time,\n  symbol AS metric,\n  MAX(value) AS value\nFROM fundamentals\nWHERE metric = 'price_target_consensus'\n  AND $__timeFilter(time)\nGROUP BY 1, 2\nORDER BY 1",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "type": "row",
+      "title": "Upgrades & Downgrades",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 44
+      },
+      "panels": []
+    },
+    {
+      "id": 15,
+      "type": "table",
+      "title": "Upgrades & Downgrades",
+      "description": "Individual analyst firm grade changes. Adjust the time range picker to control how far back you see. New rows appear within 1 hour of being published.",
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 45
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "tradingsignals"
+      },
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "displayName": "Date",
+            "desc": true
+          }
+        ],
+        "cellHeight": "md",
+        "footer": {
+          "show": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": true
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Date"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTime:YYYY-MM-DD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Action"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-background"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "Upgrade": {
+                        "color": "#1a9641",
+                        "index": 0
+                      }
+                    }
+                  },
+                  {
+                    "type": "value",
+                    "options": {
+                      "Downgrade": {
+                        "color": "#d73027",
+                        "index": 1
+                      }
+                    }
+                  },
+                  {
+                    "type": "value",
+                    "options": {
+                      "Initiation": {
+                        "color": "#4575b4",
+                        "index": 2
+                      }
+                    }
+                  },
+                  {
+                    "type": "value",
+                    "options": {
+                      "Maintained": {
+                        "color": "#636363",
+                        "index": 3
+                      }
+                    }
+                  },
+                  {
+                    "type": "value",
+                    "options": {
+                      "Reiterated": {
+                        "color": "#636363",
+                        "index": 4
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "tradingsignals"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  grade_date                                                    AS \"Date\",\n  symbol                                                        AS \"Symbol\",\n  COALESCE(firm, 'Unknown')                                     AS \"Firm\",\n  COALESCE(from_grade, '\u2014')                                     AS \"From\",\n  to_grade                                                      AS \"To Grade\",\n  CASE action\n    WHEN 'up'   THEN 'Upgrade'\n    WHEN 'down' THEN 'Downgrade'\n    WHEN 'init' THEN 'Initiation'\n    WHEN 'main' THEN 'Maintained'\n    WHEN 'reit' THEN 'Reiterated'\n    ELSE COALESCE(action, '\u2014')\n  END AS \"Action\"\nFROM analyst_grades\nWHERE $__timeFilter(grade_date)\nORDER BY grade_date DESC\nLIMIT 200",
+          "refId": "A"
+        }
+      ]
+    }
+  ],
+  "version": 6
+}

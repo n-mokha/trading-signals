@@ -1,0 +1,360 @@
+{
+  "uid": "macro-overview",
+  "title": "Macro Overview",
+  "description": "FRED economic indicators — Fed rate, CPI, VIX, 10Y yield, unemployment, oil. Updated daily. High VIX dampens composite signal scores toward neutral.",
+  "tags": ["macro", "fred"],
+  "timezone": "browser",
+  "refresh": "1h",
+  "schemaVersion": 39,
+  "time": {"from": "now-90d", "to": "now"},
+  "timepicker": {},
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "links": [],
+  "annotations": {"list": []},
+  "panels": [
+    {
+      "id": 1, "type": "row", "title": "Current Readings",
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0},
+      "panels": []
+    },
+    {
+      "id": 2, "type": "stat",
+      "title": "VIX — Volatility Index",
+      "description": "Market fear gauge. <15 = calm (green), 15–30 = elevated (yellow), >30 = fear/risk-off (red). High VIX dampens composite signal scores.",
+      "gridPos": {"h": 5, "w": 4, "x": 0, "y": 1},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "background",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 40}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 2, "displayName": "VIX",
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "#1a9641", "value": null},
+            {"color": "#f4a736", "value": 15},
+            {"color": "#d73027", "value": 30}
+          ]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT value FROM macro_indicators WHERE series_id = 'VIXCLS' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 3, "type": "stat",
+      "title": "Fed Funds Rate",
+      "description": "Federal Reserve benchmark interest rate. Higher rates = tighter financial conditions.",
+      "gridPos": {"h": 5, "w": 4, "x": 4, "y": 1},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "value",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 40}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent", "decimals": 2, "displayName": "Fed Rate",
+          "color": {"mode": "fixed", "fixedColor": "#5794F2"},
+          "thresholds": {"mode": "absolute", "steps": [{"color": "#5794F2", "value": null}]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT value FROM macro_indicators WHERE series_id = 'FEDFUNDS' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 4, "type": "stat",
+      "title": "CPI — Consumer Price Index",
+      "description": "Headline inflation measure. Drives Fed rate decisions.",
+      "gridPos": {"h": 5, "w": 4, "x": 8, "y": 1},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "value",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 40}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 1, "displayName": "CPI",
+          "color": {"mode": "fixed", "fixedColor": "#FF9830"},
+          "thresholds": {"mode": "absolute", "steps": [{"color": "#FF9830", "value": null}]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT value FROM macro_indicators WHERE series_id = 'CPIAUCSL' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 5, "type": "stat",
+      "title": "10-Year Treasury Yield",
+      "description": "Bond market's long-term rate expectation. Rising yields compress equity valuations.",
+      "gridPos": {"h": 5, "w": 4, "x": 12, "y": 1},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "value",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 40}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent", "decimals": 2, "displayName": "10Y Yield",
+          "color": {"mode": "fixed", "fixedColor": "#B877D9"},
+          "thresholds": {"mode": "absolute", "steps": [{"color": "#B877D9", "value": null}]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT value FROM macro_indicators WHERE series_id = 'DGS10' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 6, "type": "stat",
+      "title": "Unemployment Rate",
+      "description": "U.S. unemployment rate. Low unemployment = strong economy but inflationary pressure.",
+      "gridPos": {"h": 5, "w": 4, "x": 16, "y": 1},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "value",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 40}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent", "decimals": 1, "displayName": "Unemployment",
+          "color": {"mode": "fixed", "fixedColor": "#73BF69"},
+          "thresholds": {"mode": "absolute", "steps": [{"color": "#73BF69", "value": null}]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT value FROM macro_indicators WHERE series_id = 'UNRATE' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 7, "type": "stat",
+      "title": "WTI Crude Oil",
+      "description": "West Texas Intermediate crude price. Rising oil = inflationary pressure.",
+      "gridPos": {"h": 5, "w": 4, "x": 20, "y": 1},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "orientation": "auto", "textMode": "value_and_name", "colorMode": "value",
+        "graphMode": "area", "justifyMode": "center", "text": {"valueSize": 40}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD", "decimals": 2, "displayName": "WTI Oil",
+          "color": {"mode": "fixed", "fixedColor": "#F2CC0C"},
+          "thresholds": {"mode": "absolute", "steps": [{"color": "#F2CC0C", "value": null}]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "table", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT value FROM macro_indicators WHERE series_id = 'DCOILWTICO' ORDER BY time DESC LIMIT 1"
+      }]
+    },
+    {
+      "id": 8, "type": "row", "title": "VIX — Market Fear Gauge",
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 6},
+      "panels": []
+    },
+    {
+      "id": 9, "type": "timeseries",
+      "title": "VIX Volatility Index",
+      "description": "Shaded bands: green zone (<15) = calm, red zone (>30) = fear. The engine dampens signal scores by up to 25% when VIX is in the red zone.",
+      "gridPos": {"h": 9, "w": 24, "x": 0, "y": 7},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "tooltip": {"mode": "single", "sort": "none"},
+        "legend": {"displayMode": "list", "placement": "bottom", "showLegend": false}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 2,
+          "custom": {"lineWidth": 2, "fillOpacity": 15, "spanNulls": true, "showPoints": "never"},
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "#1a9641", "value": null},
+            {"color": "#f4a736", "value": 15},
+            {"color": "#d73027", "value": 30}
+          ]}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "time_series", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT time, value AS \"VIX\"\nFROM macro_indicators\nWHERE series_id = 'VIXCLS'\n  AND $__timeFilter(time)\nORDER BY time"
+      }]
+    },
+    {
+      "id": 10, "type": "row", "title": "Interest Rates",
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 16},
+      "panels": []
+    },
+    {
+      "id": 11, "type": "timeseries",
+      "title": "Interest Rates — Fed Funds, 10Y Treasury, 10Y Breakeven Inflation",
+      "description": "Fed Funds: what the Fed controls. 10Y Treasury: market's long-term expectation. Breakeven: bond market's inflation forecast. When breakeven > Fed rate, market expects real rates to stay negative.",
+      "gridPos": {"h": 10, "w": 24, "x": 0, "y": 17},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "tooltip": {"mode": "multi", "sort": "none"},
+        "legend": {"displayMode": "list", "placement": "bottom", "showLegend": true}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent", "decimals": 2,
+          "custom": {"lineWidth": 2, "fillOpacity": 8, "spanNulls": true, "showPoints": "never"}
+        },
+        "overrides": [
+          {
+            "matcher": {"id": "byName", "options": "FEDFUNDS"},
+            "properties": [
+              {"id": "displayName", "value": "Fed Funds Rate"},
+              {"id": "color", "value": {"mode": "fixed", "fixedColor": "#5794F2"}}
+            ]
+          },
+          {
+            "matcher": {"id": "byName", "options": "DGS10"},
+            "properties": [
+              {"id": "displayName", "value": "10Y Treasury Yield"},
+              {"id": "color", "value": {"mode": "fixed", "fixedColor": "#B877D9"}}
+            ]
+          },
+          {
+            "matcher": {"id": "byName", "options": "T10YIE"},
+            "properties": [
+              {"id": "displayName", "value": "10Y Breakeven Inflation"},
+              {"id": "color", "value": {"mode": "fixed", "fixedColor": "#FF9830"}}
+            ]
+          }
+        ]
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "time_series", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT time, series_id AS metric, value\nFROM macro_indicators\nWHERE series_id IN ('FEDFUNDS', 'DGS10', 'T10YIE')\n  AND $__timeFilter(time)\nORDER BY time, series_id"
+      }]
+    },
+    {
+      "id": 12, "type": "row", "title": "Inflation & Money Supply",
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 27},
+      "panels": []
+    },
+    {
+      "id": 13, "type": "timeseries",
+      "title": "CPI — Consumer Price Index",
+      "description": "Raw CPI index level (not YoY%). An upward trend signals rising inflation pressure.",
+      "gridPos": {"h": 9, "w": 12, "x": 0, "y": 28},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "tooltip": {"mode": "single", "sort": "none"},
+        "legend": {"displayMode": "list", "placement": "bottom", "showLegend": false}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none", "decimals": 1,
+          "custom": {"lineWidth": 2, "fillOpacity": 12, "spanNulls": true, "showPoints": "never"},
+          "color": {"mode": "fixed", "fixedColor": "#FF9830"}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "time_series", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT time, value AS \"CPI\"\nFROM macro_indicators\nWHERE series_id = 'CPIAUCSL'\n  AND $__timeFilter(time)\nORDER BY time"
+      }]
+    },
+    {
+      "id": 14, "type": "timeseries",
+      "title": "M2 Money Supply (Billions USD)",
+      "description": "Total money in circulation. Rapid expansion = potential future inflation; contraction = tightening.",
+      "gridPos": {"h": 9, "w": 12, "x": 12, "y": 28},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "tooltip": {"mode": "single", "sort": "none"},
+        "legend": {"displayMode": "list", "placement": "bottom", "showLegend": false}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD", "decimals": 0,
+          "custom": {"lineWidth": 2, "fillOpacity": 12, "spanNulls": true, "showPoints": "never"},
+          "color": {"mode": "fixed", "fixedColor": "#8AB8FF"}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "time_series", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT time, value * 1000000000 AS \"M2\"\nFROM macro_indicators\nWHERE series_id = 'M2SL'\n  AND $__timeFilter(time)\nORDER BY time"
+      }]
+    },
+    {
+      "id": 15, "type": "row", "title": "Commodities & Labor",
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 37},
+      "panels": []
+    },
+    {
+      "id": 16, "type": "timeseries",
+      "title": "WTI Crude Oil (USD/barrel)",
+      "description": "Energy cost proxy. Rising oil = inflationary pressure; falling oil = demand concern or supply glut.",
+      "gridPos": {"h": 9, "w": 12, "x": 0, "y": 38},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "tooltip": {"mode": "single", "sort": "none"},
+        "legend": {"displayMode": "list", "placement": "bottom", "showLegend": false}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD", "decimals": 2,
+          "custom": {"lineWidth": 2, "fillOpacity": 12, "spanNulls": true, "showPoints": "never"},
+          "color": {"mode": "fixed", "fixedColor": "#F2CC0C"}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "time_series", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT time, value AS \"WTI Crude\"\nFROM macro_indicators\nWHERE series_id = 'DCOILWTICO'\n  AND $__timeFilter(time)\nORDER BY time"
+      }]
+    },
+    {
+      "id": 17, "type": "timeseries",
+      "title": "Unemployment Rate (%)",
+      "description": "U.S. unemployment. Low = strong labor market but keeps wages (and inflation) elevated. Rapid rise = recession signal.",
+      "gridPos": {"h": 9, "w": 12, "x": 12, "y": 38},
+      "datasource": {"type": "postgres", "uid": "tradingsignals"},
+      "options": {
+        "tooltip": {"mode": "single", "sort": "none"},
+        "legend": {"displayMode": "list", "placement": "bottom", "showLegend": false}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent", "decimals": 1,
+          "custom": {"lineWidth": 2, "fillOpacity": 12, "spanNulls": true, "showPoints": "never"},
+          "color": {"mode": "fixed", "fixedColor": "#73BF69"}
+        },
+        "overrides": []
+      },
+      "targets": [{"datasource": {"type": "postgres", "uid": "tradingsignals"},
+        "format": "time_series", "rawQuery": true, "refId": "A",
+        "rawSql": "SELECT time, value AS \"Unemployment\"\nFROM macro_indicators\nWHERE series_id = 'UNRATE'\n  AND $__timeFilter(time)\nORDER BY time"
+      }]
+    }
+  ],
+  "version": 1
+}

@@ -1,0 +1,72 @@
+# ---------------------------------------------------------------------------
+# Sources configuration
+# Each source has: enabled, interval_seconds, and provider-specific fields.
+# Rate limits are enforced by setting conservative interval_seconds.
+#
+# Free tier limits (reference):
+#   Polygon   : 5 API calls/min, 15-min delayed data
+#   FMP       : 250 API calls/day  (~1 call per 345s to be safe)
+#   EDGAR     : 10 req/sec (built-in sleep in code)
+#   PRAW      : ~60-100 req/min
+#   FRED      : 120 req/min, data updates daily
+#   Unusual Whales: no published limit — poll conservatively
+# ---------------------------------------------------------------------------
+
+sources:
+
+  price_yfinance:
+    enabled: true
+    provider: yfinance
+    interval_seconds: 300        # every 5 minutes
+    bar_interval: "5m"           # yfinance interval string: 1m, 5m, 15m, 1h, 1d
+
+  price_polygon:
+    enabled: true
+    provider: polygon
+    interval_seconds: 300        # every 5 min (5 symbols × 1 call = 5 calls/5min, within limit)
+    bar_interval: "5"            # Polygon bar size in minutes
+
+  fundamentals_fmp:
+    enabled: true
+    interval_seconds: 3600       # hourly (24 runs × 4 calls = 96/day, well under 250 limit)
+    fetch_key_metrics: true
+    fetch_analyst_ratings: true
+
+  sec_filings:
+    enabled: true
+    interval_seconds: 3600       # hourly — EDGAR is event-driven, no real-time need
+    filing_types:
+      - "4"                      # Form 4: insider trades (2-day reporting lag)
+      - "8-K"                    # Material events
+    lookback_filings: 50         # how many recent filings to check per symbol
+
+  stocktwits:
+    enabled: true
+    interval_seconds: 900       # every 15 min — matches engine cycle; free API allows ~200 req/hour
+
+  reddit:
+    enabled: false
+    interval_seconds: 300        # every 5 minutes
+    subreddits:
+      - wallstreetbets
+      - investing
+      - stocks
+      - options
+    post_limit: 100              # hot posts to scan per subreddit per run
+
+  institutional:
+    enabled: true
+    interval_seconds: 86400      # daily — 13-F data updates quarterly, no need to poll faster
+
+  macro_fred:
+    enabled: true
+    interval_seconds: 86400      # daily (macro data updates at most daily)
+    series:
+      FEDFUNDS: "Federal Funds Rate"
+      CPIAUCSL: "CPI Inflation"
+      UNRATE: "Unemployment Rate"
+      DGS10: "10-Year Treasury Yield"
+      T10YIE: "10-Year Breakeven Inflation"
+      VIXCLS: "VIX Volatility Index"
+      DCOILWTICO: "WTI Crude Oil"
+      M2SL: "M2 Money Supply"
